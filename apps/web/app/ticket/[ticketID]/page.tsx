@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Select from "@/components/Select";
+import { CompletedStatus } from "@/components/StatusIcons";
 
 type FormInputs = {
   response: string;
@@ -22,6 +24,7 @@ const formatDate = (date: string | Date) => {
 
 export default function TicketPage() {
   const searchParams = useParams();
+  //   const [status, setSt]
 
   const { data, isLoading } = useQuery({
     queryKey: ["ticket"],
@@ -34,6 +37,10 @@ export default function TicketPage() {
     watch,
     formState: { errors },
   } = useForm<FormInputs>();
+
+  const setStatus = (status: string) => {
+    console.log(status);
+  };
 
   const onSubmit: SubmitHandler<FormInputs> = (formData, e) => {
     e?.preventDefault();
@@ -50,9 +57,16 @@ export default function TicketPage() {
         {isLoading ? <div>loading</div> : null}
         {!isLoading && data ? (
           <div>
-            <div className="flex items-center gap-8px">
-              <ArrowLeftIcon height={24} width={24} />
-              <p>Back</p>
+            <div className="flex justify-between">
+              <div className="flex items-center gap-8px">
+                <ArrowLeftIcon height={24} width={24} />
+                <p>Back</p>
+              </div>
+              <Select
+                onChange={setStatus}
+                value={data.status}
+                data={statuses}
+              />
             </div>
             <Spacer size={48} axis="y" />
             <p className="font-600 text-20px">{data.subject}</p>
@@ -88,6 +102,25 @@ export default function TicketPage() {
     </div>
   );
 }
+
+const statuses = {
+  open: {
+    value: "open",
+    display: <div>Open</div>,
+  },
+  new: {
+    value: "new",
+    display: (
+      <div className="flex gap-8px items-center">
+        <CompletedStatus></CompletedStatus> New
+      </div>
+    ),
+  },
+  closed: {
+    value: "closed",
+    display: <div>Closed</div>,
+  },
+};
 
 const getTicket = async (ticketID: number): Promise<Ticket> => {
   const res = await fetch(`http://localhost:3001/ticket/${ticketID}`);
