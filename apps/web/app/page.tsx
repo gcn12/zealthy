@@ -39,7 +39,7 @@ export default function ContactSupport() {
 
   return (
     <div className="grid h-full place-items-center">
-      <div className="bg-white  [border:1px_solid_#C6E7E7] rounded-14px py-40px px-48px">
+      <div className="bg-white [border:1px_solid_#C6E7E7] rounded-14px py-56px px-48px">
         <h1 className="font-600 text-24px">Contact support</h1>
         <Spacer size={4} axis="y" />
         <p>We'll get back to you within 24 hours.</p>
