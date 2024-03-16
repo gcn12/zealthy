@@ -12,7 +12,14 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 3001;
 
 app.get("/tickets", async (req: Request, res: Response) => {
-  const data = await prisma.ticket.findMany({ orderBy: { createdAt: "desc" } });
+  const data = await prisma.ticket.findMany({
+    orderBy: { createdAt: "desc" },
+    where: {
+      ...(req.query.status === "all"
+        ? {}
+        : { status: String(req.query.status) }),
+    },
+  });
   res.send(data);
 });
 
