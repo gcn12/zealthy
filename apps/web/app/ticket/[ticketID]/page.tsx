@@ -24,7 +24,6 @@ const formatDate = (date: string | Date) => {
 
 export default function TicketPage() {
   const searchParams = useParams();
-  //   const [status, setSt]
 
   const { data, isLoading } = useQuery({
     queryKey: ["ticket"],
@@ -53,7 +52,7 @@ export default function TicketPage() {
 
   return (
     <div className="grid h-full place-content-center">
-      <div className="bg-white max-w-[580px] [border:1px_solid_#C5CFD3] rounded-12px px-48px py-48px">
+      <div className="bg-white w-[580px] [border:1px_solid_#C5CFD3] rounded-12px px-48px py-48px">
         {isLoading ? <div>loading</div> : null}
         {!isLoading && data ? (
           <div>
