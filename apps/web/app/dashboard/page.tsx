@@ -37,8 +37,8 @@ export default function Dashboard() {
             return (
               <Link href={`/ticket/${id}`} key={id}>
                 <div className="flex px-16px py-12px">
-                  <p className="w-[50px]">{id}</p>
-                  <p className="w-[200px]">{subject}</p>
+                  <p className="w-[50px]">{String(id).padStart(2, "0")}</p>
+                  <p className="w-[200px] font-600">{subject}</p>
                   <p className="w-[200px]">{email}</p>
                   <p className="w-[200px]">{name}</p>
                   <p className="w-[100px]">{status}</p>
@@ -56,7 +56,7 @@ export default function Dashboard() {
 }
 
 const getTickets = async (): Promise<Ticket[]> => {
-  const res = await fetch("http://localhost:3001");
+  const res = await fetch("http://localhost:3001/tickets");
   const data = await res.json();
 
   return data;

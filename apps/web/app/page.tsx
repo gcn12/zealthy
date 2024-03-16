@@ -2,7 +2,9 @@
 
 import Input from "@/components/Input";
 import Spacer from "@/components/Spacer";
+import Spinner from "@/components/Spinner";
 import Textarea from "@/components/Textarea";
+import { CheckIcon } from "@radix-ui/react-icons";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 type FormInputs = {
@@ -17,7 +19,8 @@ export default function ContactSupport() {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useForm<FormInputs>();
 
   const onSubmit: SubmitHandler<FormInputs> = async (formData, e) => {
@@ -30,6 +33,7 @@ export default function ContactSupport() {
       body: JSON.stringify(formData),
     });
     const data = await res.json();
+    reset();
   };
 
   return (
@@ -70,9 +74,23 @@ export default function ContactSupport() {
             <Textarea {...register("description")} id="description" />
           </div>
           <Spacer size={32} axis="y" />
-          <button className="bg-black text-white py-8px px-16px rounded-4px font-600 text-14px">
-            Send help request
-          </button>
+          <div className="flex items-center gap-16px">
+            <button className="bg-black text-white py-8px px-16px rounded-4px font-600 text-14px">
+              {isSubmitting ? (
+                <div className="text-inherit flex items-center gap-8px">
+                  Sending... <Spinner />
+                </div>
+              ) : (
+                <p className="text-inherit">Send help request</p>
+              )}
+            </button>
+            {isSubmitSuccessful ? (
+              <div className="flex items-center gap-4px">
+                <CheckIcon height={20} width={20} />
+                <p>Sent successfully</p>
+              </div>
+            ) : null}
+          </div>
         </form>
       </div>
     </div>

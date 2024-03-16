@@ -1,15 +1,23 @@
 "use client";
 
-import Spacer from "@/components/Spacer";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { ArrowLeftIcon, CheckIcon } from "@radix-ui/react-icons";
+
+import Spacer from "@/components/Spacer";
 import Select from "@/components/Select";
 import { CompletedStatus } from "@/components/StatusIcons";
+import Spinner from "@/components/Spinner";
 
 type FormInputs = {
   response: string;
+};
+
+const delay = async () => {
+  return new Promise((res) => {
+    setTimeout(res, 3000);
+  });
 };
 
 const formatDate = (date: string | Date) => {
@@ -33,21 +41,23 @@ export default function TicketPage() {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useForm<FormInputs>();
 
   const setStatus = (status: string) => {
     console.log(status);
   };
 
-  const onSubmit: SubmitHandler<FormInputs> = (formData, e) => {
+  const onSubmit: SubmitHandler<FormInputs> = async (formData, e) => {
     e?.preventDefault();
     if (!data) {
       return;
     }
 
+    await delay();
     console.table({ email: data.email, response: formData.response });
+    reset();
   };
 
   return (
@@ -91,9 +101,23 @@ export default function TicketPage() {
                 {...register("response")}
                 className="[border:1px_solid_#C6E7E7] bg-[#FBFDFD] rounded-4px px-8px py-4px min-h-[100px]"
               />
-              <button className="bg-black text-white py-8px px-16px rounded-4px font-600 text-14px w-fit">
-                Send email response
-              </button>
+              <div className="flex items-center gap-16px">
+                <button className="bg-black text-white py-8px px-16px rounded-4px font-600 text-14px w-fit">
+                  {isSubmitting ? (
+                    <div className="text-inherit flex items-center gap-8px">
+                      Sending... <Spinner />
+                    </div>
+                  ) : (
+                    <p className="text-inherit">Send email response</p>
+                  )}
+                </button>
+                {isSubmitSuccessful ? (
+                  <div className="flex items-center gap-4px">
+                    <CheckIcon height={20} width={20} />
+                    <p>Sent successfully</p>
+                  </div>
+                ) : null}
+              </div>
             </form>
           </div>
         ) : null}
