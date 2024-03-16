@@ -113,11 +113,13 @@ export default function TicketPage() {
                 <ArrowLeftIcon height={20} width={20} />
                 <p className="text-14px">Back</p>
               </div>
-              <Select
-                onChange={setStatus}
-                value={data.status}
-                data={statuses}
-              />
+              <div className="w-[120px]">
+                <Select
+                  onChange={setStatus}
+                  value={data.status}
+                  data={statuses}
+                />
+              </div>
             </div>
             <Spacer size={48} axis="y" />
             <p className="font-600 text-20px">{data.subject}</p>
