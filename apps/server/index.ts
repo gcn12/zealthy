@@ -14,6 +14,13 @@ app.get("/", async (req: Request, res: Response) => {
   res.send(data);
 });
 
+app.get("/ticket/:ticketID", async (req: Request, res: Response) => {
+  const data = await prisma.ticket.findUnique({
+    where: { id: Number(req.params.ticketID) },
+  });
+  res.send(data);
+});
+
 app.get("/generate", async (req: Request, res: Response) => {
   await prisma.ticket.create({
     data: {

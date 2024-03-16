@@ -1,6 +1,5 @@
 "use client";
 
-import Spacer from "@/components/Spacer";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
@@ -25,7 +24,7 @@ export default function Dashboard() {
         {!isLoading &&
           data?.map((item, index) => {
             return (
-              <Link href={`/ticket/${item.id}`}>
+              <Link href={`/ticket/${item.id}`} key={item.id}>
                 <div className="flex px-16px py-12px">
                   <p className="w-[50px]">{item.id}</p>
                   <p className="w-[200px]">{item.subject}</p>
