@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 3001;
 
 app.get("/tickets", async (req: Request, res: Response) => {
-  const data = await prisma.ticket.findMany();
+  const data = await prisma.ticket.findMany({ orderBy: { createdAt: "desc" } });
   res.send(data);
 });
 
@@ -26,6 +26,15 @@ app.get("/ticket/:ticketID", async (req: Request, res: Response) => {
 app.post("/ticket", async (req: Request, res: Response) => {
   const data = await prisma.ticket.create({
     data: { ...req.body, status: "new" },
+  });
+
+  res.send(data);
+});
+
+app.post("/status", async (req: Request, res: Response) => {
+  const data = await prisma.ticket.update({
+    where: { id: req.body.id },
+    data: { status: req.body.status },
   });
 
   res.send(data);

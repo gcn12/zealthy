@@ -4,10 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ArrowLeftIcon, CheckIcon } from "@radix-ui/react-icons";
+import { ReactNode } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Spacer from "@/components/Spacer";
 import Select from "@/components/Select";
-import { CompletedStatus } from "@/components/StatusIcons";
+import { ClosedStatus, NewStatus, OpenStatus } from "@/components/StatusIcons";
 import Spinner from "@/components/Spinner";
 
 type FormInputs = {
@@ -32,10 +34,50 @@ const formatDate = (date: string | Date) => {
 
 export default function TicketPage() {
   const searchParams = useParams();
+  const ticketID = Number(searchParams.ticketID);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["ticket"],
-    queryFn: () => getTicket(Number(searchParams.ticketID)),
+    queryKey: ["ticket", ticketID],
+    queryFn: () => getTicket(ticketID),
+  });
+
+  const queryClient = useQueryClient();
+
+  const updateStatus = async ({
+    status,
+    id,
+  }: {
+    status: string;
+    id: number;
+  }) => {
+    const res = await fetch("http://localhost:3001/status", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status, id }),
+    });
+    const data = await res.json();
+    return data.status;
+  };
+
+  const mutation = useMutation({
+    mutationFn: updateStatus,
+    onMutate: async (newStatus) => {
+      await queryClient.cancelQueries({ queryKey: ["ticket"] });
+      const previousTicket = queryClient.getQueryData(["ticket"]);
+      queryClient.setQueryData(["ticket"], (prev: any) => {
+        return { ...prev, status: newStatus.status };
+      });
+      return { previousTicket };
+    },
+    onError: (_err, _newStatus, context) => {
+      queryClient.setQueryData(["ticket"], context?.previousTicket);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["ticket"] });
+      queryClient.invalidateQueries({ queryKey: ["tickets"] });
+    },
   });
 
   const {
@@ -46,7 +88,7 @@ export default function TicketPage() {
   } = useForm<FormInputs>();
 
   const setStatus = (status: string) => {
-    console.log(status);
+    mutation.mutate({ status, id: ticketID });
   };
 
   const onSubmit: SubmitHandler<FormInputs> = async (formData, e) => {
@@ -68,8 +110,8 @@ export default function TicketPage() {
           <div>
             <div className="flex justify-between">
               <div className="flex items-center gap-8px">
-                <ArrowLeftIcon height={24} width={24} />
-                <p>Back</p>
+                <ArrowLeftIcon height={20} width={20} />
+                <p className="text-14px">Back</p>
               </div>
               <Select
                 onChange={setStatus}
@@ -102,13 +144,15 @@ export default function TicketPage() {
                 className="[border:1px_solid_#C6E7E7] bg-[#FBFDFD] rounded-4px px-8px py-4px min-h-[100px]"
               />
               <div className="flex items-center gap-16px">
-                <button className="bg-black text-white py-8px px-16px rounded-4px font-600 text-14px w-fit">
+                <button className="bg-black text-white py-8px px-16px rounded-4px font-600 w-fit">
                   {isSubmitting ? (
-                    <div className="text-inherit flex items-center gap-8px">
+                    <div className="text-inherit flex items-center gap-8px text-14px">
                       Sending... <Spinner />
                     </div>
                   ) : (
-                    <p className="text-inherit">Send email response</p>
+                    <p className="text-inherit text-14px">
+                      Send email response
+                    </p>
                   )}
                 </button>
                 {isSubmitSuccessful ? (
@@ -126,22 +170,33 @@ export default function TicketPage() {
   );
 }
 
-const statuses = {
-  open: {
-    value: "open",
-    display: <div>Open</div>,
-  },
+export const statuses: Record<
+  string,
+  { value: string; display: string | ReactNode }
+> = {
   new: {
     value: "new",
     display: (
-      <div className="flex gap-8px items-center">
-        <CompletedStatus></CompletedStatus> New
-      </div>
+      <span className="flex gap-8px items-center text-14px">
+        <NewStatus /> New
+      </span>
+    ),
+  },
+  open: {
+    value: "open",
+    display: (
+      <span className="flex gap-8px items-center text-14px">
+        <OpenStatus /> Open
+      </span>
     ),
   },
   closed: {
     value: "closed",
-    display: <div>Closed</div>,
+    display: (
+      <span className="flex gap-8px items-center text-14px">
+        <ClosedStatus /> Closed
+      </span>
+    ),
   },
 };
 

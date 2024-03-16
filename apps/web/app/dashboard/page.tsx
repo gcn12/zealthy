@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { statuses } from "../ticket/[ticketID]/page";
 
 const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString("en-US", {
@@ -41,7 +42,7 @@ export default function Dashboard() {
                   <p className="w-[200px] font-600">{subject}</p>
                   <p className="w-[200px]">{email}</p>
                   <p className="w-[200px]">{name}</p>
-                  <p className="w-[100px]">{status}</p>
+                  <p className="w-[100px]">{statuses[status].display}</p>
                   <p className="w-[250px]">{formatDate(createdAt)}</p>
                 </div>
                 {index < data.length - 1 ? (

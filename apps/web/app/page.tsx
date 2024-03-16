@@ -1,11 +1,12 @@
 "use client";
 
+import { useForm, SubmitHandler } from "react-hook-form";
+import { CheckIcon } from "@radix-ui/react-icons";
+
 import Input from "@/components/Input";
 import Spacer from "@/components/Spacer";
 import Spinner from "@/components/Spinner";
 import Textarea from "@/components/Textarea";
-import { CheckIcon } from "@radix-ui/react-icons";
-import { useForm, SubmitHandler } from "react-hook-form";
 
 type FormInputs = {
   name: string;
@@ -75,13 +76,13 @@ export default function ContactSupport() {
           </div>
           <Spacer size={32} axis="y" />
           <div className="flex items-center gap-16px">
-            <button className="bg-black text-white py-8px px-16px rounded-4px font-600 text-14px">
+            <button className="bg-black text-white py-8px px-16px rounded-4px font-600">
               {isSubmitting ? (
-                <div className="text-inherit flex items-center gap-8px">
+                <div className="text-inherit flex items-center gap-8px text-14px">
                   Sending... <Spinner />
                 </div>
               ) : (
-                <p className="text-inherit">Send help request</p>
+                <p className="text-inherit text-14px">Send help request</p>
               )}
             </button>
             {isSubmitSuccessful ? (
