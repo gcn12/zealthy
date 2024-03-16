@@ -11,8 +11,7 @@ type FormInputs = {
 };
 
 const formatDate = (date: string | Date) => {
-  date = new Date(date);
-  return date.toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
     day: "numeric",
     month: "long",
