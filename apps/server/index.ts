@@ -12,15 +12,26 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 3001;
 
 app.get("/tickets", async (req: Request, res: Response) => {
-  const data = await prisma.ticket.findMany({
+  const getTickets = prisma.ticket.findMany({
     orderBy: { createdAt: "desc" },
     where: {
       ...(req.query.status === "all"
         ? {}
         : { status: String(req.query.status) }),
     },
+    take: 5,
+    skip: Number(req.query.page) * 5,
   });
-  res.send(data);
+  const getNumTickets = prisma.ticket.count({
+    where: {
+      ...(req.query.status === "all"
+        ? {}
+        : { status: String(req.query.status) }),
+    },
+  });
+
+  const [tickets, numTickets] = await Promise.all([getTickets, getNumTickets]);
+  res.send({ tickets, numTickets });
 });
 
 app.get("/ticket/:ticketID", async (req: Request, res: Response) => {
