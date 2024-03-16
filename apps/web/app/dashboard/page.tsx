@@ -47,7 +47,7 @@ export default function Dashboard() {
   const incrementPage = () => {
     updateSearchParams(
       "page",
-      String((page + 1) * 5 >= (data?.numTickets ?? 0) ? page : page + 1)
+      String((page + 1) * 8 >= (data?.numTickets ?? 0) ? page : page + 1)
     );
   };
 
@@ -100,14 +100,14 @@ export default function Dashboard() {
           <div className="flex items-center justify-between px-16px pb-8px">
             {data?.numTickets ? (
               <p>
-                {page * 5 + 1} to {Math.min(data.numTickets, (page + 1) * 5)} of{" "}
+                {page * 8 + 1} to {Math.min(data.numTickets, (page + 1) * 8)} of{" "}
                 {data.numTickets}
               </p>
             ) : null}
             <div className="flex gap-8px">
               {data?.numTickets ? (
                 <p>
-                  page {page + 1} of {Math.ceil(data.numTickets / 5)}
+                  page {page + 1} of {Math.ceil(data.numTickets / 8)}
                 </p>
               ) : null}
               {data && data?.numTickets > 0 ? (
