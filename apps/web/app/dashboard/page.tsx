@@ -3,6 +3,17 @@
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
+const formatDate = (date: string | Date) => {
+  date = new Date(date);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    day: "numeric",
+    month: "short",
+    minute: "numeric",
+    hour: "numeric",
+  });
+};
+
 export default function Dashboard() {
   const { data, isLoading } = useQuery({
     queryKey: ["tickets"],
@@ -23,15 +34,16 @@ export default function Dashboard() {
 
         {!isLoading &&
           data?.map((item, index) => {
+            const { id, subject, email, name, status, createdAt } = item;
             return (
-              <Link href={`/ticket/${item.id}`} key={item.id}>
+              <Link href={`/ticket/${id}`} key={id}>
                 <div className="flex px-16px py-12px">
-                  <p className="w-[50px]">{item.id}</p>
-                  <p className="w-[200px]">{item.subject}</p>
-                  <p className="w-[200px]">{item.email}</p>
-                  <p className="w-[200px]">{item.name}</p>
-                  <p className="w-[100px]">{item.status}</p>
-                  <p className="w-[250px]">{item.createdAt}</p>
+                  <p className="w-[50px]">{id}</p>
+                  <p className="w-[200px]">{subject}</p>
+                  <p className="w-[200px]">{email}</p>
+                  <p className="w-[200px]">{name}</p>
+                  <p className="w-[100px]">{status}</p>
+                  <p className="w-[250px]">{formatDate(createdAt)}</p>
                 </div>
                 {index < data.length - 1 ? (
                   <div className="[border-bottom:1px_solid_#EAEAEA]" />

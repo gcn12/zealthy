@@ -1,6 +1,6 @@
 import Spacer from "@/components/Spacer";
 
-export default function Home() {
+export default function ContactSupport() {
   return (
     <div className="grid h-full place-items-center">
       <div className="bg-white  [border:1px_solid_#C6E7E7] rounded-14px py-40px px-48px">
