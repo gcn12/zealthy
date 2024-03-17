@@ -102,8 +102,8 @@ export default function TicketPage() {
   };
 
   return (
-    <div className="grid h-full place-content-center">
-      <div className="bg-white w-[650px] [border:1px_solid_#C5CFD3] rounded-12px px-48px py-48px">
+    <div className="grid w-full place-content-center">
+      <div className="bg-white w-[650px] max-w-[95vw] [border:1px_solid_#C5CFD3] rounded-12px px-48px py-48px">
         {isLoading ? <div>loading</div> : null}
         {!isLoading && data ? (
           <div>
