@@ -19,8 +19,8 @@ app.get("/tickets", async (req: Request, res: Response) => {
         ? {}
         : { status: String(req.query.status) }),
     },
-    take: 8,
-    skip: Number(req.query.page) * 8,
+    take: 10,
+    skip: Number(req.query.page) * 10,
   });
   const getNumTickets = prisma.ticket.count({
     where: {

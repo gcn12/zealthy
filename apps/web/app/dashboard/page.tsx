@@ -12,13 +12,12 @@ import Spacer from "@/components/Spacer";
 
 const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
     day: "numeric",
     month: "short",
-    minute: "numeric",
-    hour: "numeric",
   });
 };
+
+const NUM_TICKETS_TO_FETCH = 10;
 
 export default function Dashboard() {
   const [status, setStatus] = useState("all");
@@ -47,7 +46,11 @@ export default function Dashboard() {
   const incrementPage = () => {
     updateSearchParams(
       "page",
-      String((page + 1) * 8 >= (data?.numTickets ?? 0) ? page : page + 1)
+      String(
+        (page + 1) * NUM_TICKETS_TO_FETCH >= (data?.numTickets ?? 0)
+          ? page
+          : page + 1
+      )
     );
   };
 
@@ -57,7 +60,7 @@ export default function Dashboard() {
 
   return (
     <div className="grid h-full place-content-center">
-      <div className="w-full">
+      <div className="w-[1200px] text-14px overflow-scroll">
         <div className="ml-auto max-w-[140px]">
           <Select
             rounded={false}
@@ -67,66 +70,91 @@ export default function Dashboard() {
           />
         </div>
         <Spacer size={16} axis="y" />
-        <div className="bg-white [border:1px_solid_#C5CFD3] rounded-6px min-h-[500px] flex flex-col justify-between">
+        <div className="bg-white [border:1px_solid_#C5CFD3] rounded-6px min-h-[512px] flex flex-col justify-between">
           <div>
-            <div className="flex bg-[#E9EFF0] py-14px px-16px">
-              <p className="w-[50px]">ID</p>
-              <p className="w-[200px]">Subject</p>
-              <p className="w-[200px]">Email</p>
-              <p className="w-[200px]">Name</p>
-              <p className="w-[100px]">Status</p>
-              <p className="w-[250px]">Date</p>
+            <div className="grid grid-flow-col bg-[#E9EFF0] py-14px px-32px">
+              <p className="w-[75px] font-600 text-14px">ID</p>
+              <p className="w-[300px] font-600 text-14px">Subject</p>
+              <p className="w-[200px] font-600 text-14px justify-self-end">
+                Email
+              </p>
+              <p className="w-[160px] font-600 text-14px justify-self-end">
+                Name
+              </p>
+              <p className="w-[100px] font-600 text-14px justify-self-end">
+                Status
+              </p>
+              <p className="w-[50px] font-600 text-14px justify-self-end">
+                Date
+              </p>
             </div>
             {!isLoading &&
               data?.tickets.map((item, index) => {
                 const { id, subject, email, name, status, createdAt } = item;
                 return (
-                  <Link href={`/ticket/${id}`} key={id}>
-                    <div className="flex px-16px py-12px">
-                      <p className="w-[50px]">{String(id).padStart(2, "0")}</p>
-                      <p className="w-[200px] font-600">{subject}</p>
-                      <p className="w-[200px]">{email}</p>
-                      <p className="w-[200px]">{name}</p>
-                      <p className="w-[100px]">{statuses[status].display}</p>
-                      <p className="w-[250px]">{formatDate(createdAt)}</p>
+                  <Link
+                    href={`/ticket/${id}?${searchParams.toString()}`}
+                    key={id}
+                  >
+                    <div className="grid grid-flow-col px-32px py-12px">
+                      <p className="w-[75px] text-14px">
+                        {String(id).padStart(2, "0")}
+                      </p>
+                      <p className="w-[300px] text-14px font-600 text-nowrap text-ellipsis overflow-hidden">
+                        {subject}
+                      </p>
+                      <p className="w-[200px] text-14px justify-self-end">
+                        {email}
+                      </p>
+                      <p className="w-[160px] text-14px justify-self-end">
+                        {name}
+                      </p>
+                      <p className="w-[100px] text-14px justify-self-end">
+                        {statuses[status].display}
+                      </p>
+                      <p className="w-[50px] text-14px justify-self-end">
+                        {formatDate(createdAt)}
+                      </p>
                     </div>
                     {index < data.tickets.length - 1 ? (
-                      <div className="[border-bottom:1px_solid_#EAEAEA]" />
+                      <div className="[border-bottom:1px_solid_#EAEAEA] w-[calc(100%-64px)] mx-auto" />
                     ) : null}
                   </Link>
                 );
               })}
           </div>
-          <div className="flex items-center justify-between px-16px pb-8px">
+        </div>
+        <div className="flex items-center justify-between px-16px py-16px">
+          {data?.numTickets ? (
+            <p>
+              {page * NUM_TICKETS_TO_FETCH + 1} to{" "}
+              {Math.min(data.numTickets, (page + 1) * NUM_TICKETS_TO_FETCH)} of{" "}
+              {data.numTickets}
+            </p>
+          ) : null}
+          <div className="flex gap-8px">
             {data?.numTickets ? (
               <p>
-                {page * 8 + 1} to {Math.min(data.numTickets, (page + 1) * 8)} of{" "}
-                {data.numTickets}
+                page {page + 1} of{" "}
+                {Math.ceil(data.numTickets / NUM_TICKETS_TO_FETCH)}
               </p>
             ) : null}
-            <div className="flex gap-8px">
-              {data?.numTickets ? (
-                <p>
-                  page {page + 1} of {Math.ceil(data.numTickets / 8)}
-                </p>
-              ) : null}
-              {data && data?.numTickets > 0 ? (
-                <div>
-                  <button
-                    onClick={decrementPage}
-                    className="[border:1px_solid_#8C8C8C] border-r-0 rounded-tl-4px rounded-bl-4px"
-                  >
-                    <ChevronLeftIcon height={24} width={24} />
-                  </button>
-                  <button
-                    onClick={incrementPage}
-                    className="border-[#8C8C8C] border-[1px] border-solid border-l-0 rounded-tr-4px rounded-br-4px"
-                  >
-                    <ChevronRightIcon height={24} width={24} />
-                  </button>
-                </div>
-              ) : null}
-            </div>
+            {data && data?.numTickets > 0 ? (
+              <div>
+                <button
+                  onClick={decrementPage}
+                  className="[border:1px_solid_#8C8C8C] border-r-0 rounded-tl-4px rounded-bl-4px"
+                >
+                  <ChevronLeftIcon height={24} width={24} />
+                </button>
+                <button
+                  onClick={incrementPage}
+                  className="border-[#8C8C8C] border-[1px] border-solid border-l-0 rounded-tr-4px rounded-br-4px"
+                >
+                  <ChevronRightIcon height={24} width={24} />
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

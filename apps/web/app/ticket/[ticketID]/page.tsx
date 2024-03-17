@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ArrowLeftIcon, CheckIcon } from "@radix-ui/react-icons";
 import { ReactNode } from "react";
@@ -11,6 +11,7 @@ import Spacer from "@/components/Spacer";
 import Select from "@/components/Select";
 import { ClosedStatus, NewStatus, OpenStatus } from "@/components/StatusIcons";
 import Spinner from "@/components/Spinner";
+import Link from "next/link";
 
 type FormInputs = {
   response: string;
@@ -33,8 +34,9 @@ const formatDate = (date: string | Date) => {
 };
 
 export default function TicketPage() {
-  const searchParams = useParams();
-  const ticketID = Number(searchParams.ticketID);
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const ticketID = Number(params.ticketID);
 
   const { data, isLoading } = useQuery({
     queryKey: ["ticket", ticketID],
@@ -109,10 +111,13 @@ export default function TicketPage() {
         {!isLoading && data ? (
           <div>
             <div className="flex justify-between">
-              <div className="flex items-center gap-8px">
+              <Link
+                href={`/dashboard?${searchParams.toString()}`}
+                className="flex items-center gap-8px"
+              >
                 <ArrowLeftIcon height={20} width={20} />
                 <p className="text-14px">Back</p>
-              </div>
+              </Link>
               <div className="w-[120px]">
                 <Select
                   onChange={setStatus}
