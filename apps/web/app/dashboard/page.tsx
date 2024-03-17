@@ -9,12 +9,12 @@ import Select from "@/components/Select";
 import Spacer from "@/components/Spacer";
 import { statuses } from "@/app/common";
 
-const formatDate = (date: string | Date) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "short",
-  });
-};
+// const formatDate = (date: string | Date) => {
+//   return new Date(date).toLocaleDateString("en-US", {
+//     day: "numeric",
+//     month: "short",
+//   });
+// };
 
 const NUM_TICKETS_TO_FETCH = 10;
 
