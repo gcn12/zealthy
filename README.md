@@ -1,14 +1,17 @@
-# Turborepo starter
+# Help Desk App
 
-This is an official starter Turborepo.
+<img width="1534" alt="Screenshot 2024-03-17 at 6 34 55 PM" src="https://github.com/gcn12/zealthy/assets/63011139/2d20bbc4-d644-4ab2-9a0c-04e082fffac4">
 
-## Using this example
+Live app viewable here: [App](https://zealthy-five.vercel.app)
+
 
 Run the following command:
 
 ```sh
 npx create-turbo@latest
 ```
+
+
 
 ## What's inside?
 
