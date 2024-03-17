@@ -16,10 +16,10 @@ const Select = ({ onChange, value, data, rounded = true }: Props) => {
       <Listbox value={value} onChange={onChange}>
         <div className="relative">
           <Listbox.Button
-            className={`flex w-full items-center justify-center gap-8px cursor-default bg-white 
+            className={`relative flex w-full items-center justify-center gap-8px bg-white 
             [border:1px_solid_#D6D6D6] ${rounded ? "rounded-50px" : "rounded-4px"} px-12px py-4px 
             focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 
-            focus-visible:ring-offset-2 focus-visible:ring-offset-black`}
+            focus-visible:ring-offset-2 focus-visible:ring-offset-black cursor-pointer`}
           >
             <span className="block truncate">{data[value].display}</span>
             <span className="pointer-events-none">
@@ -42,7 +42,7 @@ const Select = ({ onChange, value, data, rounded = true }: Props) => {
                   <Listbox.Option
                     key={index}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-4px px-12px rounded-4px ${
+                      `relative cursor-pointer select-none py-4px px-12px rounded-4px ${
                         active ? "bg-[#E6F4F4]" : "text-gray-900"
                       }`
                     }

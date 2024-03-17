@@ -92,8 +92,9 @@ export default function Dashboard() {
                   <Link
                     href={`/ticket/${id}?${searchParams.toString()}`}
                     key={id}
+                    className=""
                   >
-                    <div className="flex flex-shrink-0 px-32px py-12px">
+                    <div className="flex flex-shrink-0 px-32px py-12px hover:bg-[#FAFAFA] transition-all duration-75">
                       <p className="min-w-[75px] text-14px">
                         {String(id).padStart(2, "0")}
                       </p>
