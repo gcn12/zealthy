@@ -20,11 +20,11 @@ const formatDate = (date: string | Date) => {
 const NUM_TICKETS_TO_FETCH = 10;
 
 export default function Dashboard() {
-  const [status, setStatus] = useState("all");
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page")) ?? 0;
+  const status = searchParams.get("status") ?? "all";
 
   const { data, isLoading } = useQuery({
     queryKey: ["tickets", status, page],
@@ -40,7 +40,7 @@ export default function Dashboard() {
 
   const updateFilterByStatus = (status: string) => {
     updateSearchParams("page", "0");
-    setStatus(status);
+    updateSearchParams("status", status);
   };
 
   const incrementPage = () => {
