@@ -49,7 +49,7 @@ export default function ContactSupport() {
       },
       body: JSON.stringify(formData),
     });
-    const data = await res.json();
+    await res.json();
   };
 
   return (
