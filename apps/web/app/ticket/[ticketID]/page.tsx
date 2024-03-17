@@ -11,7 +11,7 @@ import Select from "@/components/Select";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
 import Textarea from "@/components/Textarea";
-import { serverURL, statuses } from "@/app/common";
+import { delay, serverURL, statuses } from "@/app/common";
 
 type FormInputs = {
   response: string;
@@ -80,7 +80,7 @@ export default function TicketPage() {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { isSubmitSuccessful, isSubmitting },
   } = useForm<FormInputs>();
 
   const setStatus = (status: string) => {
@@ -105,7 +105,7 @@ export default function TicketPage() {
     <div className="grid h-full place-content-center">
       <div className="bg-white w-[650px] max-w-[95vw] [border:1px_solid_#C5CFD3] rounded-12px px-48px py-48px">
         {isLoading ? <div>loading</div> : null}
-        {!isLoading && data ? (
+        {data ? (
           <div>
             <div className="flex justify-between">
               <Link
@@ -186,12 +186,6 @@ const getTicket = async (ticketID: number): Promise<Ticket> => {
   const data = await res.json();
 
   return data;
-};
-
-const delay = async (ms: number) => {
-  return new Promise((res) => {
-    setTimeout(res, ms);
-  });
 };
 
 type Ticket = {

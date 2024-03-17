@@ -91,7 +91,7 @@ export default function Dashboard() {
               <p className="min-w-[100px] font-600 text-14px">Status</p>
               <p className="min-w-[50px] font-600 text-14px ml-auto">Date</p>
             </div>
-            <div id="test" className="w-[1200px]">
+            <div className="w-[1200px]">
               {!isLoading &&
                 data?.tickets.map((item, index) => {
                   const { id, subject, email, name, status, createdAt } = item;

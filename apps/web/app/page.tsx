@@ -7,13 +7,7 @@ import Input from "@/components/Input";
 import Spacer from "@/components/Spacer";
 import Spinner from "@/components/Spinner";
 import Textarea from "@/components/Textarea";
-import { serverURL } from "./common";
-
-const delay = async (ms: number) => {
-  return new Promise((res) => {
-    setTimeout(res, ms);
-  });
-};
+import { delay, serverURL } from "@/app/common";
 
 const promiseDelay = async (
   asyncFunction: (...params: any) => Promise<any>
@@ -42,6 +36,7 @@ export default function ContactSupport() {
     await promiseDelay(() => sendRequest(formData));
     reset();
   };
+
   const sendRequest = async (formData: Record<string, any>) => {
     const res = await fetch(`${serverURL}/ticket`, {
       method: "POST",

@@ -4,6 +4,12 @@ import { ReactNode } from "react";
 export const serverURL =
   process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3001";
 
+export const delay = async (ms: number) => {
+  return new Promise((res) => {
+    setTimeout(res, ms);
+  });
+};
+
 export const statuses: Record<
   string,
   { value: string; display: string | ReactNode }

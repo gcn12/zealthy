@@ -1,8 +1,9 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { prisma } from "./prisma/prisma";
 import bodyParser from "body-parser";
+
+import { prisma } from "./prisma/prisma";
 
 dotenv.config();
 
