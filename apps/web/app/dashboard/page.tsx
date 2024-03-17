@@ -19,11 +19,11 @@ import { statuses } from "@/app/common";
 const NUM_TICKETS_TO_FETCH = 10;
 
 export default function Dashboard() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = Number(searchParams.get("page")) ?? 0;
-  const status = searchParams.get("status") ?? "all";
+  // const pathname = usePathname();
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
+  // const page = Number(searchParams.get("page")) ?? 0;
+  // const status = searchParams.get("status") ?? "all";
 
   // const { data, isLoading } = useQuery({
   //   queryKey: ["tickets", status, page],
@@ -179,23 +179,23 @@ export default function Dashboard() {
   );
 }
 
-const getTickets = async (
-  status: string,
-  page: number
-): Promise<{ tickets: Ticket[]; numTickets: number }> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/tickets?status=${status}&page=${page}`
-  );
-  const data = await res.json();
+// const getTickets = async (
+//   status: string,
+//   page: number
+// ): Promise<{ tickets: Ticket[]; numTickets: number }> => {
+//   const res = await fetch(
+//     `${process.env.NEXT_PUBLIC_SERVER_URL}/tickets?status=${status}&page=${page}`
+//   );
+//   const data = await res.json();
 
-  return data;
-};
+//   return data;
+// };
 
-type Ticket = {
-  id: number;
-  subject: string;
-  name: string;
-  email: string;
-  status: string;
-  createdAt: string;
-};
+// type Ticket = {
+//   id: number;
+//   subject: string;
+//   name: string;
+//   email: string;
+//   status: string;
+//   createdAt: string;
+// };
