@@ -13,7 +13,6 @@ import { ClosedStatus, NewStatus, OpenStatus } from "@/components/StatusIcons";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
 import Textarea from "@/components/Textarea";
-import { delay } from "@/app/page";
 
 type FormInputs = {
   response: string;
@@ -105,7 +104,7 @@ export default function TicketPage() {
 
   return (
     <div className="grid h-full place-content-center">
-      <div className="bg-white w-[580px] [border:1px_solid_#C5CFD3] rounded-12px px-48px py-48px">
+      <div className="bg-white w-[650px] [border:1px_solid_#C5CFD3] rounded-12px px-48px py-48px">
         {isLoading ? <div>loading</div> : null}
         {!isLoading && data ? (
           <div>
@@ -141,31 +140,41 @@ export default function TicketPage() {
               <p className="text-14px">{data.email}</p>
             </div>
             <Spacer size={48} axis="y" />
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="flex flex-col gap-18px"
-            >
-              <Textarea {...register("response")} required maxLength={1500} />
-              <div className="flex items-center gap-16px">
-                <button className="bg-black text-white py-8px px-16px rounded-4px font-600 w-fit">
-                  {isSubmitting ? (
-                    <div className="text-inherit flex items-center gap-8px text-14px">
-                      Sending... <Spinner />
+            <fieldset disabled={isSubmitting}>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex flex-col gap-18px"
+              >
+                <label className="sr-only" htmlFor="response">
+                  Send response
+                </label>
+                <Textarea
+                  {...register("response")}
+                  required
+                  maxLength={1500}
+                  id="response"
+                />
+                <div className="flex items-center gap-16px">
+                  <button className="bg-black text-white py-8px px-16px rounded-4px font-600 w-fit">
+                    {isSubmitting ? (
+                      <div className="text-inherit flex items-center gap-8px text-14px">
+                        Sending... <Spinner />
+                      </div>
+                    ) : (
+                      <p className="text-inherit text-14px">
+                        Send email response
+                      </p>
+                    )}
+                  </button>
+                  {isSubmitSuccessful ? (
+                    <div className="flex items-center gap-4px">
+                      <CheckIcon height={20} width={20} />
+                      <p>Sent successfully</p>
                     </div>
-                  ) : (
-                    <p className="text-inherit text-14px">
-                      Send email response
-                    </p>
-                  )}
-                </button>
-                {isSubmitSuccessful ? (
-                  <div className="flex items-center gap-4px">
-                    <CheckIcon height={20} width={20} />
-                    <p>Sent successfully</p>
-                  </div>
-                ) : null}
-              </div>
-            </form>
+                  ) : null}
+                </div>
+              </form>
+            </fieldset>
           </div>
         ) : null}
       </div>
@@ -208,6 +217,12 @@ const getTicket = async (ticketID: number): Promise<Ticket> => {
   const data = await res.json();
 
   return data;
+};
+
+const delay = async (ms: number) => {
+  return new Promise((res) => {
+    setTimeout(res, ms);
+  });
 };
 
 type Ticket = {

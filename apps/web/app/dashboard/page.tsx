@@ -60,7 +60,7 @@ export default function Dashboard() {
   return (
     <div className="grid h-full place-content-center">
       <div className="w-[1200px] text-14px overflow-scroll">
-        <div className="ml-auto max-w-[140px]">
+        <div className="ml-auto max-w-[130px]">
           <Select
             rounded={false}
             data={statusData}
@@ -125,10 +125,9 @@ export default function Dashboard() {
             </div>
           </div>
           {data && data.tickets.length === 0 ? (
-            <div className="m-auto">
-              <p>No tickets to display</p>
-            </div>
+            <p className="m-auto">No tickets to display</p>
           ) : null}
+          {isLoading ? <p className="m-auto">Loading...</p> : null}
         </div>
         <div className="flex items-center justify-between px-16px py-16px">
           {data?.numTickets ? (
