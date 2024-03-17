@@ -21,8 +21,8 @@ const NUM_TICKETS_TO_FETCH = 10;
 export default function Dashboard() {
   // const pathname = usePathname();
   // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const page = Number(searchParams.get("page")) ?? 0;
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) ?? 0;
   // const status = searchParams.get("status") ?? "all";
 
   // const { data, isLoading } = useQuery({
