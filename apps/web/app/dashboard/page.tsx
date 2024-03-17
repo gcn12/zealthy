@@ -31,30 +31,30 @@ export default function Dashboard() {
     placeholderData: keepPreviousData,
   });
 
-  const updateSearchParams = (param: string, value: string) => {
+  const updateSearchParams = (keyValuePairs: Record<string, string>) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set(param, value);
+    for (const k in keyValuePairs) {
+      params.set(k, keyValuePairs[k]);
+    }
     router.push(pathname + "?" + params);
   };
 
   const updateFilterByStatus = (status: string) => {
-    updateSearchParams("page", "0");
-    updateSearchParams("status", status);
+    updateSearchParams({ page: "0", status: status });
   };
 
   const incrementPage = () => {
-    updateSearchParams(
-      "page",
-      String(
+    updateSearchParams({
+      page: String(
         (page + 1) * NUM_TICKETS_TO_FETCH >= (data?.numTickets ?? 0)
           ? page
           : page + 1
-      )
-    );
+      ),
+    });
   };
 
   const decrementPage = () => {
-    updateSearchParams("page", String(Math.max(0, page - 1)));
+    updateSearchParams({ page: String(Math.max(0, page - 1)) });
   };
 
   return (
@@ -124,6 +124,11 @@ export default function Dashboard() {
                 })}
             </div>
           </div>
+          {data && data.tickets.length === 0 ? (
+            <div className="m-auto">
+              <p>No tickets to display</p>
+            </div>
+          ) : null}
         </div>
         <div className="flex items-center justify-between px-16px py-16px">
           {data?.numTickets ? (
@@ -165,21 +170,12 @@ export default function Dashboard() {
 
 const statusData = {
   all: {
-    display: "All statuses",
+    display: (
+      <span className="flex gap-8px items-center text-14px">All statuses</span>
+    ),
     value: "all",
   },
-  new: {
-    display: "New",
-    value: "new",
-  },
-  open: {
-    display: "Open",
-    value: "open",
-  },
-  closed: {
-    display: "Closed",
-    value: "closed",
-  },
+  ...statuses,
 };
 
 const getTickets = async (
