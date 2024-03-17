@@ -8,6 +8,19 @@ import Spacer from "@/components/Spacer";
 import Spinner from "@/components/Spinner";
 import Textarea from "@/components/Textarea";
 
+export const delay = async (ms: number) => {
+  return new Promise((res) => {
+    setTimeout(res, ms);
+  });
+};
+
+const promiseDelay = async (
+  asyncFunction: (...params: any) => Promise<any>
+) => {
+  const [result] = await Promise.all([asyncFunction(), delay(1000)]);
+  return result;
+};
+
 type FormInputs = {
   name: string;
   email: string;
@@ -19,13 +32,16 @@ export default function ContactSupport() {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { isSubmitSuccessful, isSubmitting },
   } = useForm<FormInputs>();
 
   const onSubmit: SubmitHandler<FormInputs> = async (formData, e) => {
     e?.preventDefault();
+    await promiseDelay(() => sendRequest(formData));
+    reset();
+  };
+  const sendRequest = async (formData: Record<string, any>) => {
     const res = await fetch("http://localhost:3001/ticket", {
       method: "POST",
       headers: {
@@ -34,7 +50,6 @@ export default function ContactSupport() {
       body: JSON.stringify(formData),
     });
     const data = await res.json();
-    reset();
   };
 
   return (
@@ -50,14 +65,20 @@ export default function ContactSupport() {
               <label className="font-600 text-14px" htmlFor="name">
                 Name
               </label>
-              <Input {...register("name")} id="name" />
+              <Input required maxLength={300} {...register("name")} id="name" />
             </div>
             <Spacer size={24} axis="x" />
             <div className="flex flex-col gap-4px w-full">
               <label className="font-600 text-14px" htmlFor="email">
                 Email
               </label>
-              <Input {...register("email")} id="email" />
+              <Input
+                type="email"
+                required
+                maxLength={300}
+                {...register("email")}
+                id="email"
+              />
             </div>
           </div>
           <Spacer size={24} axis="y" />
@@ -65,14 +86,24 @@ export default function ContactSupport() {
             <label className="font-600 text-14px" htmlFor="subject">
               Subject
             </label>
-            <Input {...register("subject")} id="subject" />
+            <Input
+              required
+              maxLength={300}
+              {...register("subject")}
+              id="subject"
+            />
           </div>
           <Spacer size={24} axis="y" />
           <div className="flex flex-col gap-4px">
             <label className="font-600 text-14px" htmlFor="description">
               Description of issue
             </label>
-            <Textarea {...register("description")} id="description" />
+            <Textarea
+              required
+              maxLength={1000}
+              {...register("description")}
+              id="description"
+            />
           </div>
           <Spacer size={32} axis="y" />
           <div className="flex items-center gap-16px">

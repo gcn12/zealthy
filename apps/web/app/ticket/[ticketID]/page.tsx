@@ -12,15 +12,11 @@ import Select from "@/components/Select";
 import { ClosedStatus, NewStatus, OpenStatus } from "@/components/StatusIcons";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
+import Textarea from "@/components/Textarea";
+import { delay } from "@/app/page";
 
 type FormInputs = {
   response: string;
-};
-
-const delay = async () => {
-  return new Promise((res) => {
-    setTimeout(res, 3000);
-  });
 };
 
 const formatDate = (date: string | Date) => {
@@ -99,8 +95,11 @@ export default function TicketPage() {
       return;
     }
 
-    await delay();
-    console.table({ email: data.email, response: formData.response });
+    await delay(1000);
+
+    console.log(
+      `Would normally send email here with body: ${formData.response}`
+    );
     reset();
   };
 
@@ -146,10 +145,7 @@ export default function TicketPage() {
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col gap-18px"
             >
-              <textarea
-                {...register("response")}
-                className="[border:1px_solid_#C6E7E7] bg-[#FBFDFD] rounded-4px px-8px py-4px min-h-[100px]"
-              />
+              <Textarea {...register("response")} required maxLength={1500} />
               <div className="flex items-center gap-16px">
                 <button className="bg-black text-white py-8px px-16px rounded-4px font-600 w-fit">
                   {isSubmitting ? (
