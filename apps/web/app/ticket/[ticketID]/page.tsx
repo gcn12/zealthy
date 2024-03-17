@@ -4,15 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ArrowLeftIcon, CheckIcon } from "@radix-ui/react-icons";
-import { ReactNode } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Spacer from "@/components/Spacer";
 import Select from "@/components/Select";
-import { ClosedStatus, NewStatus, OpenStatus } from "@/components/StatusIcons";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
 import Textarea from "@/components/Textarea";
+import { statuses } from "@/app/common";
 
 type FormInputs = {
   response: string;
@@ -47,7 +46,7 @@ export default function TicketPage() {
     status: string;
     id: number;
   }) => {
-    const res = await fetch("http://localhost:3001/status", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/status`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -182,38 +181,10 @@ export default function TicketPage() {
   );
 }
 
-export const statuses: Record<
-  string,
-  { value: string; display: string | ReactNode }
-> = {
-  new: {
-    value: "new",
-    display: (
-      <span className="flex gap-8px items-center text-14px">
-        <NewStatus /> New
-      </span>
-    ),
-  },
-  open: {
-    value: "open",
-    display: (
-      <span className="flex gap-8px items-center text-14px">
-        <OpenStatus /> Open
-      </span>
-    ),
-  },
-  closed: {
-    value: "closed",
-    display: (
-      <span className="flex gap-8px items-center text-14px">
-        <ClosedStatus /> Closed
-      </span>
-    ),
-  },
-};
-
 const getTicket = async (ticketID: number): Promise<Ticket> => {
-  const res = await fetch(`http://localhost:3001/ticket/${ticketID}`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/ticket/${ticketID}`
+  );
   const data = await res.json();
 
   return data;

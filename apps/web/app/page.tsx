@@ -8,6 +8,12 @@ import Spacer from "@/components/Spacer";
 import Spinner from "@/components/Spinner";
 import Textarea from "@/components/Textarea";
 
+const delay = async (ms: number) => {
+  return new Promise((res) => {
+    setTimeout(res, ms);
+  });
+};
+
 const promiseDelay = async (
   asyncFunction: (...params: any) => Promise<any>
 ) => {
@@ -36,7 +42,7 @@ export default function ContactSupport() {
     reset();
   };
   const sendRequest = async (formData: Record<string, any>) => {
-    const res = await fetch("http://localhost:3001/ticket", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ticket`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

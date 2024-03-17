@@ -5,9 +5,9 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { statuses } from "../ticket/[ticketID]/page";
 import Select from "@/components/Select";
 import Spacer from "@/components/Spacer";
+import { statuses } from "../common";
 
 const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString("en-US", {
@@ -182,7 +182,7 @@ const getTickets = async (
   page: number
 ): Promise<{ tickets: Ticket[]; numTickets: number }> => {
   const res = await fetch(
-    `http://localhost:3001/tickets?status=${status}&page=${page}`
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/tickets?status=${status}&page=${page}`
   );
   const data = await res.json();
 
