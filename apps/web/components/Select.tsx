@@ -30,29 +30,31 @@ const Select = ({ onChange, value, data, rounded = true }: Props) => {
             leaveTo="opacity-0"
           >
             <Listbox.Options className="absolute w-full overflow-auto rounded-6px bg-white px-8px py-8px [border:1px_solid_#C6E7E7] focus:outline-none">
-              {Object.values(data).map((item, index) => (
-                <Listbox.Option
-                  key={index}
-                  className={({ active }) =>
-                    `relative cursor-default select-none py-4px px-12px rounded-4px ${
-                      active ? "bg-[#E6F4F4]" : "text-gray-900"
-                    }`
-                  }
-                  value={item.value}
-                >
-                  {({ selected }) => (
-                    <>
-                      <span
-                        className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
-                        }`}
-                      >
-                        {item.display}
-                      </span>
-                    </>
-                  )}
-                </Listbox.Option>
-              ))}
+              {Object.values(data)
+                .filter((item) => item.value !== value)
+                .map((item, index) => (
+                  <Listbox.Option
+                    key={index}
+                    className={({ active }) =>
+                      `relative cursor-default select-none py-4px px-12px rounded-4px ${
+                        active ? "bg-[#E6F4F4]" : "text-gray-900"
+                      }`
+                    }
+                    value={item.value}
+                  >
+                    {({ selected }) => (
+                      <>
+                        <span
+                          className={`block truncate ${
+                            selected ? "font-medium" : "font-normal"
+                          }`}
+                        >
+                          {item.display}
+                        </span>
+                      </>
+                    )}
+                  </Listbox.Option>
+                ))}
             </Listbox.Options>
           </Transition>
         </div>
