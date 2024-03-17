@@ -9,70 +9,70 @@ import Select from "@/components/Select";
 import Spacer from "@/components/Spacer";
 import { statuses } from "@/app/common";
 
-// const formatDate = (date: string | Date) => {
-//   return new Date(date).toLocaleDateString("en-US", {
-//     day: "numeric",
-//     month: "short",
-//   });
-// };
+const formatDate = (date: string | Date) => {
+  return new Date(date).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+  });
+};
 
 const NUM_TICKETS_TO_FETCH = 10;
 
 export default function Dashboard() {
-  // const pathname = usePathname();
-  // const router = useRouter();
+  const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
-  // const page = Number(searchParams.get("page") ?? 0);
-  // const status = searchParams.get("status") ?? "all";
+  const page = Number(searchParams.get("page") ?? 0);
+  const status = searchParams.get("status") ?? "all";
 
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["tickets", status, page],
-  //   queryFn: () => getTickets(status, page),
-  //   placeholderData: keepPreviousData,
-  // });
+  const { data, isLoading } = useQuery({
+    queryKey: ["tickets", status, page],
+    queryFn: () => getTickets(status, page),
+    placeholderData: keepPreviousData,
+  });
 
-  // const updateSearchParams = (keyValuePairs: Record<string, string>) => {
-  //   const params = new URLSearchParams(searchParams.toString());
-  //   for (const k in keyValuePairs) {
-  //     params.set(k, keyValuePairs[k]);
-  //   }
-  //   router.push(pathname + "?" + params);
-  // };
+  const updateSearchParams = (keyValuePairs: Record<string, string>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const k in keyValuePairs) {
+      params.set(k, keyValuePairs[k]);
+    }
+    router.push(pathname + "?" + params);
+  };
 
-  // const updateFilterByStatus = (status: string) => {
-  //   updateSearchParams({ page: "0", status: status });
-  // };
+  const updateFilterByStatus = (status: string) => {
+    updateSearchParams({ page: "0", status: status });
+  };
 
-  // const incrementPage = () => {
-  //   updateSearchParams({
-  //     page: String(
-  //       (page + 1) * NUM_TICKETS_TO_FETCH >= (data?.numTickets ?? 0)
-  //         ? page
-  //         : page + 1
-  //     ),
-  //   });
-  // };
+  const incrementPage = () => {
+    updateSearchParams({
+      page: String(
+        (page + 1) * NUM_TICKETS_TO_FETCH >= (data?.numTickets ?? 0)
+          ? page
+          : page + 1
+      ),
+    });
+  };
 
-  // const decrementPage = () => {
-  //   updateSearchParams({ page: String(Math.max(0, page - 1)) });
-  // };
+  const decrementPage = () => {
+    updateSearchParams({ page: String(Math.max(0, page - 1)) });
+  };
 
-  // const statusData = {
-  //   all: {
-  //     display: (
-  //       <span className="flex gap-8px items-center text-14px">
-  //         All statuses
-  //       </span>
-  //     ),
-  //     value: "all",
-  //   },
-  //   ...statuses,
-  // };
+  const statusData = {
+    all: {
+      display: (
+        <span className="flex gap-8px items-center text-14px">
+          All statuses
+        </span>
+      ),
+      value: "all",
+    },
+    ...statuses,
+  };
 
   return (
     <div className="grid h-full place-content-center">
       <div className="w-[1200px] text-14px overflow-scroll">
-        {/* <div className="ml-auto max-w-[130px]">
+        <div className="ml-auto max-w-[130px]">
           <Select
             rounded={false}
             data={statusData}
@@ -173,29 +173,29 @@ export default function Dashboard() {
               </div>
             ) : null}
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );
 }
 
-// const getTickets = async (
-//   status: string,
-//   page: number
-// ): Promise<{ tickets: Ticket[]; numTickets: number }> => {
-//   const res = await fetch(
-//     `${process.env.NEXT_PUBLIC_SERVER_URL}/tickets?status=${status}&page=${page}`
-//   );
-//   const data = await res.json();
+const getTickets = async (
+  status: string,
+  page: number
+): Promise<{ tickets: Ticket[]; numTickets: number }> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/tickets?status=${status}&page=${page}`
+  );
+  const data = await res.json();
 
-//   return data;
-// };
+  return data;
+};
 
-// type Ticket = {
-//   id: number;
-//   subject: string;
-//   name: string;
-//   email: string;
-//   status: string;
-//   createdAt: string;
-// };
+type Ticket = {
+  id: number;
+  subject: string;
+  name: string;
+  email: string;
+  status: string;
+  createdAt: string;
+};
