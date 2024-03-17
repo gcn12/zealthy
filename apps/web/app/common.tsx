@@ -47,3 +47,13 @@ export const statuses: Record<
     ),
   },
 };
+
+export type Ticket = {
+  id: number;
+  subject: string;
+  name: string;
+  email: string;
+  status: string;
+  createdAt: string;
+  description: string;
+};

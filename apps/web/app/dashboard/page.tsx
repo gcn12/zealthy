@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import Select from "@/components/Select";
 import Spacer from "@/components/Spacer";
-import { serverURL, statuses } from "@/app/common";
+import { Ticket, serverURL, statuses } from "@/app/common";
 
 export default function Dashboard() {
   const pathname = usePathname();
@@ -165,15 +165,6 @@ const statusData = {
     value: "all",
   },
   ...statuses,
-};
-
-type Ticket = {
-  id: number;
-  subject: string;
-  name: string;
-  email: string;
-  status: string;
-  createdAt: string;
 };
 
 const getTickets = async (

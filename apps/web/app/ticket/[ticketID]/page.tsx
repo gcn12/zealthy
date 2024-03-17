@@ -10,34 +10,31 @@ import Link from "next/link";
 import Spacer from "@/components/Spacer";
 import Select from "@/components/Select";
 import Textarea from "@/components/Textarea";
-import { delay, serverURL, statuses } from "@/app/common";
+import { Ticket, delay, serverURL, statuses } from "@/app/common";
 import Button from "@/components/Button";
 
 type FormInputs = {
   response: string;
 };
 
-const formatDate = (date: string | Date) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    day: "numeric",
-    month: "long",
-    minute: "numeric",
-    hour: "numeric",
-  });
-};
-
 export default function TicketPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitSuccessful, isSubmitting },
+  } = useForm<FormInputs>();
+
   const ticketID = Number(params.ticketID);
 
   const { data, isLoading } = useQuery({
     queryKey: ["ticket", ticketID],
     queryFn: () => getTicket(ticketID),
   });
-
-  const queryClient = useQueryClient();
 
   const updateStatus = async ({
     status,
@@ -65,7 +62,7 @@ export default function TicketPage() {
     onMutate: async (newStatus) => {
       await queryClient.cancelQueries({ queryKey: ["ticket"] });
       const previousTicket = queryClient.getQueryData(["ticket"]);
-      queryClient.setQueryData(["ticket"], (prev: any) => {
+      queryClient.setQueryData(["ticket"], (prev: Ticket) => {
         return { ...prev, status: newStatus.status };
       });
       return { previousTicket };
@@ -78,13 +75,6 @@ export default function TicketPage() {
       queryClient.invalidateQueries({ queryKey: ["tickets"] });
     },
   });
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { isSubmitSuccessful, isSubmitting },
-  } = useForm<FormInputs>();
 
   const setStatus = (status: string) => {
     mutation.mutate({ status, id: ticketID });
@@ -184,17 +174,16 @@ const getTicket = async (ticketID: number): Promise<Ticket> => {
   if (!res.ok) {
     throw new Error("Failed to load data");
   }
-  const data = await res.json();
 
-  return data;
+  return await res.json();
 };
 
-type Ticket = {
-  id: number;
-  subject: string;
-  name: string;
-  email: string;
-  status: string;
-  createdAt: string;
-  description: string;
+const formatDate = (date: string | Date) => {
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    day: "numeric",
+    month: "long",
+    minute: "numeric",
+    hour: "numeric",
+  });
 };
