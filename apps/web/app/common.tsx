@@ -1,5 +1,6 @@
-import { ClosedStatus, NewStatus, OpenStatus } from "@/components/StatusIcons";
 import { ReactNode } from "react";
+
+import { ClosedStatus, NewStatus, OpenStatus } from "@/components/StatusIcons";
 
 export const serverURL =
   process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3001";

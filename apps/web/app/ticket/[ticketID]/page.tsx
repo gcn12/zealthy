@@ -53,6 +53,9 @@ export default function TicketPage() {
       },
       body: JSON.stringify({ status, id }),
     });
+    if (!res.ok) {
+      throw new Error("Failed to load data");
+    }
     const data = await res.json();
     return data.status;
   };
@@ -178,6 +181,9 @@ export default function TicketPage() {
 
 const getTicket = async (ticketID: number): Promise<Ticket> => {
   const res = await fetch(`${serverURL}/ticket/${ticketID}`);
+  if (!res.ok) {
+    throw new Error("Failed to load data");
+  }
   const data = await res.json();
 
   return data;

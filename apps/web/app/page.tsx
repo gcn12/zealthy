@@ -38,6 +38,9 @@ export default function ContactSupport() {
       },
       body: JSON.stringify(formData),
     });
+    if (!res.ok) {
+      throw new Error("Failed to load data");
+    }
     await res.json();
   };
 

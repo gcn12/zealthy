@@ -9,19 +9,11 @@ import Select from "@/components/Select";
 import Spacer from "@/components/Spacer";
 import { serverURL, statuses } from "@/app/common";
 
-const formatDate = (date: string | Date) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "short",
-  });
-};
-
-const NUM_TICKETS_TO_FETCH = 10;
-
 export default function Dashboard() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const page = Number(searchParams.get("page") ?? 0);
   const status = searchParams.get("status") ?? "all";
 
@@ -44,11 +36,12 @@ export default function Dashboard() {
   };
 
   const incrementPage = () => {
+    if (data?.numTickets === undefined) {
+      return;
+    }
     updateSearchParams({
       page: String(
-        (page + 1) * NUM_TICKETS_TO_FETCH >= (data?.numTickets ?? 0)
-          ? page
-          : page + 1
+        (page + 1) * NUM_TICKETS_TO_FETCH >= data.numTickets ? page : page + 1
       ),
     });
   };
@@ -57,21 +50,19 @@ export default function Dashboard() {
     updateSearchParams({ page: String(Math.max(0, page - 1)) });
   };
 
-  const statusData = {
-    all: {
-      display: (
-        <span className="flex gap-8px items-center text-14px">
-          All statuses
-        </span>
-      ),
-      value: "all",
-    },
-    ...statuses,
-  };
+  const ticketRangeStart = page * NUM_TICKETS_TO_FETCH + 1;
+  let ticketRangeEnd = null;
+  let numPages = null;
+
+  if (data?.numTickets) {
+    const { numTickets } = data;
+    numPages = Math.ceil(numTickets / NUM_TICKETS_TO_FETCH);
+    ticketRangeEnd = Math.min(numTickets, (page + 1) * NUM_TICKETS_TO_FETCH);
+  }
 
   return (
     <div className="h-full min-h-[700px] grid place-content-center">
-      <div className="text-14px ">
+      <div>
         <div className="ml-auto max-w-[130px]">
           <Select
             rounded={false}
@@ -81,7 +72,10 @@ export default function Dashboard() {
           />
         </div>
         <Spacer size={16} axis="y" />
-        <div className="w-[1200px] max-w-[95vw] overflow-scroll bg-white [border:1px_solid_#C5CFD3] rounded-6px min-h-[512px] flex flex-col justify-between">
+        <div
+          className="w-[1200px] max-w-[95vw] overflow-scroll bg-white [border:1px_solid_#C5CFD3] 
+          rounded-6px min-h-[512px] flex flex-col justify-between"
+        >
           <div className="w-full">
             <div className="flex bg-[#E9EFF0] w-[1200px] py-14px px-32px">
               <p className="min-w-[75px] font-600 text-14px">ID</p>
@@ -92,40 +86,39 @@ export default function Dashboard() {
               <p className="min-w-[50px] font-600 text-14px ml-auto">Date</p>
             </div>
             <div className="w-[1200px]">
-              {!isLoading &&
-                data?.tickets.map((item, index) => {
-                  const { id, subject, email, name, status, createdAt } = item;
-                  return (
-                    <Link
-                      href={`/ticket/${id}?${searchParams.toString()}`}
-                      key={id}
-                    >
-                      <div className="flex flex-shrink-0 px-32px py-12px">
-                        <p className="min-w-[75px] text-14px">
-                          {String(id).padStart(2, "0")}
-                        </p>
-                        <p className="min-w-[350px] whitespace-nowrap text-14px font-600 text-nowrap text-ellipsis overflow-hidden">
-                          {subject}
-                        </p>
-                        <p className="min-w-[275px] whitespace-nowrap text-14px">
-                          {email}
-                        </p>
-                        <p className="min-w-[250px] whitespace-nowrap text-14px">
-                          {name}
-                        </p>
-                        <p className="min-w-[100px] whitespace-nowrap text-14px">
-                          {statuses[status].display}
-                        </p>
-                        <p className="w-[50px] whitespace-nowrap text-14px ml-auto">
-                          {formatDate(createdAt)}
-                        </p>
-                      </div>
-                      {index < data.tickets.length - 1 ? (
-                        <div className="[border-bottom:1px_solid_#EAEAEA] w-[calc(100%-64px)] mx-auto" />
-                      ) : null}
-                    </Link>
-                  );
-                })}
+              {data?.tickets.map((ticket, index) => {
+                const { id, subject, email, name, status, createdAt } = ticket;
+                return (
+                  <Link
+                    href={`/ticket/${id}?${searchParams.toString()}`}
+                    key={id}
+                  >
+                    <div className="flex flex-shrink-0 px-32px py-12px">
+                      <p className="min-w-[75px] text-14px">
+                        {String(id).padStart(2, "0")}
+                      </p>
+                      <p className="min-w-[350px] whitespace-nowrap text-14px font-600 text-nowrap text-ellipsis overflow-hidden">
+                        {subject}
+                      </p>
+                      <p className="min-w-[275px] whitespace-nowrap text-14px text-nowrap text-ellipsis overflow-hidden">
+                        {email}
+                      </p>
+                      <p className="min-w-[250px] whitespace-nowrap text-14px text-nowrap text-ellipsis overflow-hidden">
+                        {name}
+                      </p>
+                      <p className="min-w-[100px] whitespace-nowrap text-14px">
+                        {statuses[status].display}
+                      </p>
+                      <p className="w-[50px] whitespace-nowrap text-14px ml-auto">
+                        {formatDate(createdAt)}
+                      </p>
+                    </div>
+                    {index < data.tickets.length - 1 ? (
+                      <div className="[border-bottom:1px_solid_#EAEAEA] w-[calc(100%-64px)] mx-auto" />
+                    ) : null}
+                  </Link>
+                );
+              })}
             </div>
           </div>
           {data && data.tickets.length === 0 ? (
@@ -133,22 +126,15 @@ export default function Dashboard() {
           ) : null}
           {isLoading ? <p className="m-auto">Loading...</p> : null}
         </div>
-        <div className="flex items-center justify-between px-16px py-16px">
-          {data?.numTickets ? (
+        {data?.numTickets ? (
+          <div className="flex items-center justify-between p-16px">
             <p>
-              {page * NUM_TICKETS_TO_FETCH + 1} to{" "}
-              {Math.min(data.numTickets, (page + 1) * NUM_TICKETS_TO_FETCH)} of{" "}
-              {data.numTickets}
+              {ticketRangeStart} to {ticketRangeEnd} of {data.numTickets}
             </p>
-          ) : null}
-          <div className="flex gap-8px">
-            {data?.numTickets ? (
+            <div className="flex gap-8px">
               <p>
-                page {page + 1} of{" "}
-                {Math.ceil(data.numTickets / NUM_TICKETS_TO_FETCH)}
+                page {page + 1} of {numPages}
               </p>
-            ) : null}
-            {data && data?.numTickets > 0 ? (
               <div>
                 <button
                   onClick={decrementPage}
@@ -163,22 +149,22 @@ export default function Dashboard() {
                   <ChevronRightIcon height={24} width={24} />
                 </button>
               </div>
-            ) : null}
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </div>
   );
 }
 
-const getTickets = async (
-  status: string,
-  page: number
-): Promise<{ tickets: Ticket[]; numTickets: number }> => {
-  const res = await fetch(`${serverURL}/tickets?status=${status}&page=${page}`);
-  const data = await res.json();
-
-  return data;
+const statusData = {
+  all: {
+    display: (
+      <span className="flex gap-8px items-center text-14px">All statuses</span>
+    ),
+    value: "all",
+  },
+  ...statuses,
 };
 
 type Ticket = {
@@ -189,3 +175,24 @@ type Ticket = {
   status: string;
   createdAt: string;
 };
+
+const getTickets = async (
+  status: string,
+  page: number
+): Promise<{ tickets: Ticket[]; numTickets: number }> => {
+  const res = await fetch(`${serverURL}/tickets?status=${status}&page=${page}`);
+  if (!res.ok) {
+    throw new Error("Failed to load data");
+  }
+
+  return await res.json();
+};
+
+const formatDate = (date: string | Date) => {
+  return new Date(date).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+  });
+};
+
+const NUM_TICKETS_TO_FETCH = 10;
