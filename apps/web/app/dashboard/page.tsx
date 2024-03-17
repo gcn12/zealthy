@@ -88,40 +88,42 @@ export default function Dashboard() {
                 Date
               </p>
             </div>
-            {!isLoading &&
-              data?.tickets.map((item, index) => {
-                const { id, subject, email, name, status, createdAt } = item;
-                return (
-                  <Link
-                    href={`/ticket/${id}?${searchParams.toString()}`}
-                    key={id}
-                  >
-                    <div className="grid grid-flow-col px-32px py-12px">
-                      <p className="w-[75px] text-14px">
-                        {String(id).padStart(2, "0")}
-                      </p>
-                      <p className="w-[300px] text-14px font-600 text-nowrap text-ellipsis overflow-hidden">
-                        {subject}
-                      </p>
-                      <p className="w-[200px] text-14px justify-self-end">
-                        {email}
-                      </p>
-                      <p className="w-[160px] text-14px justify-self-end">
-                        {name}
-                      </p>
-                      <p className="w-[100px] text-14px justify-self-end">
-                        {statuses[status].display}
-                      </p>
-                      <p className="w-[50px] text-14px justify-self-end">
-                        {formatDate(createdAt)}
-                      </p>
-                    </div>
-                    {index < data.tickets.length - 1 ? (
-                      <div className="[border-bottom:1px_solid_#EAEAEA] w-[calc(100%-64px)] mx-auto" />
-                    ) : null}
-                  </Link>
-                );
-              })}
+            <div id="test">
+              {!isLoading &&
+                data?.tickets.map((item, index) => {
+                  const { id, subject, email, name, status, createdAt } = item;
+                  return (
+                    <Link
+                      href={`/ticket/${id}?${searchParams.toString()}`}
+                      key={id}
+                    >
+                      <div className="grid grid-flow-col px-32px py-12px">
+                        <p className="w-[75px] text-14px">
+                          {String(id).padStart(2, "0")}
+                        </p>
+                        <p className="w-[300px] text-14px font-600 text-nowrap text-ellipsis overflow-hidden">
+                          {subject}
+                        </p>
+                        <p className="w-[200px] text-14px justify-self-end">
+                          {email}
+                        </p>
+                        <p className="w-[160px] text-14px justify-self-end">
+                          {name}
+                        </p>
+                        <p className="w-[100px] text-14px justify-self-end">
+                          {statuses[status].display}
+                        </p>
+                        <p className="w-[50px] text-14px justify-self-end">
+                          {formatDate(createdAt)}
+                        </p>
+                      </div>
+                      {index < data.tickets.length - 1 ? (
+                        <div className="[border-bottom:1px_solid_#EAEAEA] w-[calc(100%-64px)] mx-auto" />
+                      ) : null}
+                    </Link>
+                  );
+                })}
+            </div>
           </div>
         </div>
         <div className="flex items-center justify-between px-16px py-16px">
