@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import Select from "@/components/Select";
 import Spacer from "@/components/Spacer";
-import { statuses } from "../common";
+import { statuses } from "@/app/common";
 
 const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString("en-US", {
