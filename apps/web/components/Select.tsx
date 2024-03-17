@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
@@ -16,7 +16,7 @@ const Select = ({ onChange, value, data, rounded = true }: Props) => {
       <Listbox value={value} onChange={onChange}>
         <div className="relative">
           <Listbox.Button
-            className={`relative flex w-full items-center justify-center gap-8px cursor-default bg-white [border:1px_solid_#D6D6D6] ${rounded ? "rounded-50px" : "rounded-4px"}  px-12px py-4px focus:outline-none focus-visible:black focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300`}
+            className={`relative flex w-full items-center justify-center gap-8px cursor-default bg-white [border:1px_solid_#D6D6D6] ${rounded ? "rounded-50px" : "rounded-4px"}  px-12px py-4px focus:outline-none focus-visible:black focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-black`}
           >
             <span className="block truncate">{data[value].display}</span>
             <span className="pointer-events-none">

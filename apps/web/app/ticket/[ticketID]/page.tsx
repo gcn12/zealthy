@@ -135,7 +135,7 @@ export default function TicketPage() {
               <p className="text-14px">{formatDate(data.createdAt)}</p>
             </div>
             <Spacer size={30} axis="y" />
-            <p>{data.description}</p>
+            <p className="whitespace-pre-wrap text-16px">{data.description}</p>
             <Spacer size={30} axis="y" />
             <div className="flex gap-8px">
               <p className="font-600 text-14px">{data.name}</p>
