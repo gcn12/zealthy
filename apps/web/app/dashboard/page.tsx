@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import Select from "@/components/Select";
 import Spacer from "@/components/Spacer";
-import { statuses } from "@/app/common";
+import { serverURL, statuses } from "@/app/common";
 
 const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString("en-US", {
@@ -183,9 +183,7 @@ const getTickets = async (
   status: string,
   page: number
 ): Promise<{ tickets: Ticket[]; numTickets: number }> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/tickets?status=${status}&page=${page}`
-  );
+  const res = await fetch(`${serverURL}/tickets?status=${status}&page=${page}`);
   const data = await res.json();
 
   return data;

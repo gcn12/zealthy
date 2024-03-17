@@ -11,7 +11,7 @@ import Select from "@/components/Select";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
 import Textarea from "@/components/Textarea";
-import { statuses } from "@/app/common";
+import { serverURL, statuses } from "@/app/common";
 
 type FormInputs = {
   response: string;
@@ -46,7 +46,7 @@ export default function TicketPage() {
     status: string;
     id: number;
   }) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/status`, {
+    const res = await fetch(`${serverURL}/status`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -182,9 +182,7 @@ export default function TicketPage() {
 }
 
 const getTicket = async (ticketID: number): Promise<Ticket> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/ticket/${ticketID}`
-  );
+  const res = await fetch(`${serverURL}/ticket/${ticketID}`);
   const data = await res.json();
 
   return data;
