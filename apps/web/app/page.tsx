@@ -39,35 +39,35 @@ export default function ContactSupport() {
 
   return (
     <div className="grid h-full place-items-center">
-      <div className="bg-white [border:1px_solid_#C6E7E7] rounded-14px py-56px px-48px">
+      <div className="bg-white [border:1px_solid_#C6E7E7] min-w-[550px] rounded-14px py-56px px-48px">
         <h1 className="font-600 text-24px">Contact support</h1>
         <Spacer size={4} axis="y" />
         <p>We'll get back to you within 24 hours.</p>
         <Spacer size={36} axis="y" />
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex justify-between">
-            <div className="flex flex-col gap-4px">
+            <div className="flex flex-col gap-4px w-full">
               <label className="font-600 text-14px" htmlFor="name">
                 Name
               </label>
               <Input {...register("name")} id="name" />
             </div>
             <Spacer size={24} axis="x" />
-            <div className="flex flex-col gap-4px">
+            <div className="flex flex-col gap-4px w-full">
               <label className="font-600 text-14px" htmlFor="email">
                 Email
               </label>
               <Input {...register("email")} id="email" />
             </div>
           </div>
-          <Spacer size={16} axis="y" />
+          <Spacer size={24} axis="y" />
           <div className="flex flex-col gap-4px">
             <label className="font-600 text-14px" htmlFor="subject">
               Subject
             </label>
             <Input {...register("subject")} id="subject" />
           </div>
-          <Spacer size={16} axis="y" />
+          <Spacer size={24} axis="y" />
           <div className="flex flex-col gap-4px">
             <label className="font-600 text-14px" htmlFor="description">
               Description of issue
