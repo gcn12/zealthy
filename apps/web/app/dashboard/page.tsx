@@ -70,8 +70,8 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="grid h-full place-content-center">
-      <div className="w-[1200px] text-14px overflow-scroll">
+    <div className="h-full min-h-[700px] grid place-content-center">
+      <div className="text-14px ">
         <div className="ml-auto max-w-[130px]">
           <Select
             rounded={false}
@@ -81,25 +81,17 @@ export default function Dashboard() {
           />
         </div>
         <Spacer size={16} axis="y" />
-        <div className="bg-white [border:1px_solid_#C5CFD3] rounded-6px min-h-[512px] flex flex-col justify-between">
-          <div>
-            <div className="grid grid-flow-col bg-[#E9EFF0] py-14px px-32px">
-              <p className="w-[75px] font-600 text-14px">ID</p>
-              <p className="w-[300px] font-600 text-14px">Subject</p>
-              <p className="w-[200px] font-600 text-14px justify-self-end">
-                Email
-              </p>
-              <p className="w-[160px] font-600 text-14px justify-self-end">
-                Name
-              </p>
-              <p className="w-[100px] font-600 text-14px justify-self-end">
-                Status
-              </p>
-              <p className="w-[50px] font-600 text-14px justify-self-end">
-                Date
-              </p>
+        <div className="w-[1200px] max-w-[95vw] overflow-scroll bg-white [border:1px_solid_#C5CFD3] rounded-6px min-h-[512px] flex flex-col justify-between">
+          <div className="w-full">
+            <div className="flex bg-[#E9EFF0] w-[1200px] py-14px px-32px">
+              <p className="min-w-[75px] font-600 text-14px">ID</p>
+              <p className="min-w-[350px] font-600 text-14px">Subject</p>
+              <p className="min-w-[275px] font-600 text-14px">Email</p>
+              <p className="min-w-[250px] font-600 text-14px">Name</p>
+              <p className="min-w-[100px] font-600 text-14px">Status</p>
+              <p className="min-w-[50px] font-600 text-14px ml-auto">Date</p>
             </div>
-            <div id="test">
+            <div id="test" className="w-[1200px]">
               {!isLoading &&
                 data?.tickets.map((item, index) => {
                   const { id, subject, email, name, status, createdAt } = item;
@@ -108,23 +100,23 @@ export default function Dashboard() {
                       href={`/ticket/${id}?${searchParams.toString()}`}
                       key={id}
                     >
-                      <div className="grid grid-flow-col px-32px py-12px">
-                        <p className="w-[75px] text-14px">
+                      <div className="flex flex-shrink-0 px-32px py-12px">
+                        <p className="min-w-[75px] text-14px">
                           {String(id).padStart(2, "0")}
                         </p>
-                        <p className="w-[300px] text-14px font-600 text-nowrap text-ellipsis overflow-hidden">
+                        <p className="min-w-[350px] whitespace-nowrap text-14px font-600 text-nowrap text-ellipsis overflow-hidden">
                           {subject}
                         </p>
-                        <p className="w-[200px] text-14px justify-self-end">
+                        <p className="min-w-[275px] whitespace-nowrap text-14px">
                           {email}
                         </p>
-                        <p className="w-[160px] text-14px justify-self-end">
+                        <p className="min-w-[250px] whitespace-nowrap text-14px">
                           {name}
                         </p>
-                        <p className="w-[100px] text-14px justify-self-end">
+                        <p className="min-w-[100px] whitespace-nowrap text-14px">
                           {statuses[status].display}
                         </p>
-                        <p className="w-[50px] text-14px justify-self-end">
+                        <p className="w-[50px] whitespace-nowrap text-14px ml-auto">
                           {formatDate(createdAt)}
                         </p>
                       </div>
