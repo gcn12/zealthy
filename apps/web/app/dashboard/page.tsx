@@ -25,54 +25,54 @@ export default function Dashboard() {
   const page = Number(searchParams.get("page")) ?? 0;
   const status = searchParams.get("status") ?? "all";
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["tickets", status, page],
-    queryFn: () => getTickets(status, page),
-    placeholderData: keepPreviousData,
-  });
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["tickets", status, page],
+  //   queryFn: () => getTickets(status, page),
+  //   placeholderData: keepPreviousData,
+  // });
 
-  const updateSearchParams = (keyValuePairs: Record<string, string>) => {
-    const params = new URLSearchParams(searchParams.toString());
-    for (const k in keyValuePairs) {
-      params.set(k, keyValuePairs[k]);
-    }
-    router.push(pathname + "?" + params);
-  };
+  // const updateSearchParams = (keyValuePairs: Record<string, string>) => {
+  //   const params = new URLSearchParams(searchParams.toString());
+  //   for (const k in keyValuePairs) {
+  //     params.set(k, keyValuePairs[k]);
+  //   }
+  //   router.push(pathname + "?" + params);
+  // };
 
-  const updateFilterByStatus = (status: string) => {
-    updateSearchParams({ page: "0", status: status });
-  };
+  // const updateFilterByStatus = (status: string) => {
+  //   updateSearchParams({ page: "0", status: status });
+  // };
 
-  const incrementPage = () => {
-    updateSearchParams({
-      page: String(
-        (page + 1) * NUM_TICKETS_TO_FETCH >= (data?.numTickets ?? 0)
-          ? page
-          : page + 1
-      ),
-    });
-  };
+  // const incrementPage = () => {
+  //   updateSearchParams({
+  //     page: String(
+  //       (page + 1) * NUM_TICKETS_TO_FETCH >= (data?.numTickets ?? 0)
+  //         ? page
+  //         : page + 1
+  //     ),
+  //   });
+  // };
 
-  const decrementPage = () => {
-    updateSearchParams({ page: String(Math.max(0, page - 1)) });
-  };
+  // const decrementPage = () => {
+  //   updateSearchParams({ page: String(Math.max(0, page - 1)) });
+  // };
 
-  const statusData = {
-    all: {
-      display: (
-        <span className="flex gap-8px items-center text-14px">
-          All statuses
-        </span>
-      ),
-      value: "all",
-    },
-    ...statuses,
-  };
+  // const statusData = {
+  //   all: {
+  //     display: (
+  //       <span className="flex gap-8px items-center text-14px">
+  //         All statuses
+  //       </span>
+  //     ),
+  //     value: "all",
+  //   },
+  //   ...statuses,
+  // };
 
   return (
     <div className="grid h-full place-content-center">
       <div className="w-[1200px] text-14px overflow-scroll">
-        <div className="ml-auto max-w-[130px]">
+        {/* <div className="ml-auto max-w-[130px]">
           <Select
             rounded={false}
             data={statusData}
@@ -173,7 +173,7 @@ export default function Dashboard() {
               </div>
             ) : null}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
