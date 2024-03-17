@@ -5,13 +5,13 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ArrowLeftIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 
 import Spacer from "@/components/Spacer";
 import Select from "@/components/Select";
-import Spinner from "@/components/Spinner";
-import Link from "next/link";
 import Textarea from "@/components/Textarea";
 import { delay, serverURL, statuses } from "@/app/common";
+import Button from "@/components/Button";
 
 type FormInputs = {
   response: string;
@@ -154,17 +154,12 @@ export default function TicketPage() {
                   id="response"
                 />
                 <div className="flex items-center gap-16px">
-                  <button className="bg-black text-white py-8px px-16px rounded-4px font-600 w-fit">
-                    {isSubmitting ? (
-                      <div className="text-inherit flex items-center gap-8px text-14px">
-                        Sending... <Spinner />
-                      </div>
-                    ) : (
-                      <p className="text-inherit text-14px">
-                        Send email response
-                      </p>
-                    )}
-                  </button>
+                  <Button
+                    isSubmitting={isSubmitting}
+                    submittingText="Sending..."
+                  >
+                    Send email response
+                  </Button>
                   {isSubmitSuccessful ? (
                     <div className="flex items-center gap-4px">
                       <CheckIcon height={20} width={20} />

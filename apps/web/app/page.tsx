@@ -5,16 +5,9 @@ import { CheckIcon } from "@radix-ui/react-icons";
 
 import Input from "@/components/Input";
 import Spacer from "@/components/Spacer";
-import Spinner from "@/components/Spinner";
 import Textarea from "@/components/Textarea";
-import { delay, serverURL } from "@/app/common";
-
-const promiseDelay = async (
-  asyncFunction: (...params: any) => Promise<any>
-) => {
-  const [result] = await Promise.all([asyncFunction(), delay(1000)]);
-  return result;
-};
+import { artificialDelay, serverURL } from "@/app/common";
+import Button from "@/components/Button";
 
 type FormInputs = {
   name: string;
@@ -33,11 +26,11 @@ export default function ContactSupport() {
 
   const onSubmit: SubmitHandler<FormInputs> = async (formData, e) => {
     e?.preventDefault();
-    await promiseDelay(() => sendRequest(formData));
+    await artificialDelay(() => sendRequest(formData));
     reset();
   };
 
-  const sendRequest = async (formData: Record<string, any>) => {
+  const sendRequest = async (formData: Record<string, string>) => {
     const res = await fetch(`${serverURL}/ticket`, {
       method: "POST",
       headers: {
@@ -56,7 +49,10 @@ export default function ContactSupport() {
         <p>We'll get back to you within 24 hours.</p>
         <Spacer size={36} axis="y" />
         <fieldset disabled={isSubmitting}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="flex gap-24px flex-col"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="flex justify-between flex-col sm:flex-row gap-24px">
               <div className="flex flex-col gap-4px w-full">
                 <label className="font-600 text-14px" htmlFor="name">
@@ -82,7 +78,6 @@ export default function ContactSupport() {
                 />
               </div>
             </div>
-            <Spacer size={24} axis="y" />
             <div className="flex flex-col gap-4px">
               <label className="font-600 text-14px" htmlFor="subject">
                 Subject
@@ -94,7 +89,6 @@ export default function ContactSupport() {
                 id="subject"
               />
             </div>
-            <Spacer size={24} axis="y" />
             <div className="flex flex-col gap-4px">
               <label className="font-600 text-14px" htmlFor="description">
                 Description of issue
@@ -106,17 +100,10 @@ export default function ContactSupport() {
                 id="description"
               />
             </div>
-            <Spacer size={32} axis="y" />
             <div className="flex items-center gap-16px">
-              <button className="bg-black text-white py-8px px-16px rounded-4px font-600">
-                {isSubmitting ? (
-                  <div className="text-inherit flex items-center gap-8px text-14px">
-                    Sending... <Spinner />
-                  </div>
-                ) : (
-                  <p className="text-inherit text-14px">Send help request</p>
-                )}
-              </button>
+              <Button isSubmitting={isSubmitting} submittingText="Sending...">
+                Send help request
+              </Button>
               {isSubmitSuccessful ? (
                 <div className="flex items-center gap-4px">
                   <CheckIcon height={20} width={20} />

@@ -10,6 +10,13 @@ export const delay = async (ms: number) => {
   });
 };
 
+export const artificialDelay = async (
+  asyncFunction: (...params: any) => Promise<any>
+) => {
+  const [result] = await Promise.all([asyncFunction(), delay(1000)]);
+  return result;
+};
+
 export const statuses: Record<
   string,
   { value: string; display: string | ReactNode }
