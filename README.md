@@ -50,3 +50,6 @@ End-to-end tests were created with Playwright. The test creates a ticket and mod
 
 ### Infrastructure:
 The app was hosted on Vercel and Railway
+
+### UI Design
+All designs were created from scratch. To see the final mockups and early versions, take a look at the Figma link: https://www.figma.com/file/Ox8EL9QFFxbOwTdTGSuHdT/Zealthy?type=design&node-id=43%3A410&mode=design&t=VIFzZwbuw5nDnc9P-1
