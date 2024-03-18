@@ -22,7 +22,7 @@ DATABASE_URL=<DATABASE_CONNECTION_STRING>
 Navigate to the apps/server directory and run:
 
 ```sh
-npx prisma migrate
+npx prisma migrate dev
 ```
 
 To start the server and web app, navigate to the root directory and run:
