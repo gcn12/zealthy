@@ -89,7 +89,7 @@ export default function Dashboard() {
           rounded-6px min-h-[512px] flex flex-col justify-between"
         >
           <div className="w-full">
-            <div className="flex bg-[#E9EFF0] w-[1200px] py-14px px-32px">
+            <div className="flex bg-[#E9EFF0] w-[1198px] py-14px px-32px">
               <p className="min-w-[75px] font-600 text-14px">ID</p>
               <p className="min-w-[350px] font-600 text-14px">Subject</p>
               <p className="min-w-[275px] font-600 text-14px">Email</p>
@@ -97,7 +97,7 @@ export default function Dashboard() {
               <p className="min-w-[100px] font-600 text-14px">Status</p>
               <p className="min-w-[50px] font-600 text-14px ml-auto">Date</p>
             </div>
-            <div className="w-[1200px]">
+            <div className="w-[1198px]">
               {data?.tickets.map((ticket, index) => {
                 const { id, subject, email, name, status, createdAt } = ticket;
                 return (
