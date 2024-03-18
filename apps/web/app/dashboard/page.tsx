@@ -8,8 +8,16 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Select from "@/components/Select";
 import Spacer from "@/components/Spacer";
 import { Ticket, serverURL, statuses } from "@/app/common";
+import Input from "@/components/Input";
+import { useForm } from "react-hook-form";
+
+type FormInputs = {
+  searchQuery: string;
+};
 
 export default function Dashboard() {
+  const { register, watch } = useForm<FormInputs>();
+
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -18,8 +26,8 @@ export default function Dashboard() {
   const status = searchParams.get("status") ?? "all";
 
   const { data, isLoading } = useQuery({
-    queryKey: ["tickets", status, page],
-    queryFn: () => getTickets(status, page),
+    queryKey: ["tickets", status, page, watch("searchQuery")],
+    queryFn: () => getTickets(status, page, watch("searchQuery")),
     placeholderData: keepPreviousData,
   });
 
@@ -63,13 +71,20 @@ export default function Dashboard() {
   return (
     <div className="h-full min-h-[700px] grid place-content-center">
       <div>
-        <div className="ml-auto max-w-[130px]">
-          <Select
-            rounded={false}
-            data={statusData}
-            value={status}
-            onChange={updateFilterByStatus}
+        <div className="flex items-center">
+          <Input
+            className="[border:1px_solid_#D6D6D6] bg-white w-[250px] placeholder:text-black"
+            {...register("searchQuery")}
+            placeholder="Search..."
           />
+          <div className="ml-auto w-[130px]">
+            <Select
+              rounded={false}
+              data={statusData}
+              value={status}
+              onChange={updateFilterByStatus}
+            />
+          </div>
         </div>
         <Spacer size={16} axis="y" />
         <div
@@ -132,22 +147,22 @@ export default function Dashboard() {
             <p>
               {ticketRangeStart} to {ticketRangeEnd} of {data.numTickets}
             </p>
-            <div className="flex gap-8px">
+            <div className="flex gap-8px items-center">
               <p>
                 page {page + 1} of {numPages}
               </p>
               <div>
                 <button
                   onClick={decrementPage}
-                  className="[border:1px_solid_#8C8C8C] border-r-0 rounded-tl-4px rounded-bl-4px"
+                  className="[border:1px_solid_#D6D6D6] bg-white border-r-0 rounded-tl-4px rounded-bl-4px p-4px"
                 >
-                  <ChevronLeftIcon height={24} width={24} />
+                  <ChevronLeftIcon height={22} width={22} />
                 </button>
                 <button
                   onClick={incrementPage}
-                  className="border-[#8C8C8C] border-[1px] border-solid border-l-0 rounded-tr-4px rounded-br-4px"
+                  className="[border:1px_solid_#D6D6D6] bg-white border-[1px] border-solid border-l-0 rounded-tr-4px rounded-br-4px p-4px"
                 >
-                  <ChevronRightIcon height={24} width={24} />
+                  <ChevronRightIcon height={22} width={22} />
                 </button>
               </div>
             </div>
@@ -170,9 +185,12 @@ const statusData = {
 
 const getTickets = async (
   status: string,
-  page: number
+  page: number,
+  searchQuery: string
 ): Promise<{ tickets: Ticket[]; numTickets: number }> => {
-  const res = await fetch(`${serverURL}/tickets?status=${status}&page=${page}`);
+  const res = await fetch(
+    `${serverURL}/tickets?status=${status}&page=${page}&searchQuery=${searchQuery}`
+  );
   if (!res.ok) {
     throw new Error("Failed to load data");
   }

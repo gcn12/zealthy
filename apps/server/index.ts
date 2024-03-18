@@ -13,50 +13,76 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 3001;
 
 app.get("/tickets", async (req: Request, res: Response) => {
-  const getTickets = prisma.ticket.findMany({
-    orderBy: { createdAt: "desc" },
-    where: {
-      ...(req.query.status === "all"
-        ? {}
-        : { status: String(req.query.status) }),
-    },
-    take: 10,
-    skip: Number(req.query.page) * 10,
-  });
-  const getNumTickets = prisma.ticket.count({
-    where: {
-      ...(req.query.status === "all"
-        ? {}
-        : { status: String(req.query.status) }),
-    },
-  });
+  try {
+    const searchQuery = (req.query.searchQuery ?? "") as string;
+    const { status } = req.query;
 
-  const [tickets, numTickets] = await Promise.all([getTickets, getNumTickets]);
-  res.send({ tickets, numTickets });
+    const searchObject = {
+      email: { search: searchQuery },
+      name: { search: searchQuery },
+      subject: { search: searchQuery },
+    };
+
+    const queryObject = {
+      ...(searchQuery ? searchObject : {}),
+      ...(status === "all" ? {} : { status: String(status) }),
+    };
+
+    const getTickets = prisma.ticket.findMany({
+      orderBy: { createdAt: "desc" },
+      where: queryObject,
+      take: 10,
+      skip: Number(req.query.page) * 10,
+    });
+
+    const getNumTickets = prisma.ticket.count({
+      where: queryObject,
+    });
+
+    const [tickets, numTickets] = await Promise.all([
+      getTickets,
+      getNumTickets,
+    ]);
+    res.send({ tickets, numTickets });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 app.get("/ticket/:ticketID", async (req: Request, res: Response) => {
-  const data = await prisma.ticket.findUnique({
-    where: { id: Number(req.params.ticketID) },
-  });
-  res.send(data);
+  try {
+    const data = await prisma.ticket.findUnique({
+      where: { id: Number(req.params.ticketID) },
+    });
+    res.send(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 app.post("/ticket", async (req: Request, res: Response) => {
-  const data = await prisma.ticket.create({
-    data: { ...req.body, status: "new" },
-  });
+  try {
+    const data = await prisma.ticket.create({
+      data: { ...req.body, status: "new" },
+    });
 
-  res.send(data);
+    res.send(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 app.post("/status", async (req: Request, res: Response) => {
-  const data = await prisma.ticket.update({
-    where: { id: req.body.id },
-    data: { status: req.body.status },
-  });
+  try {
+    const data = await prisma.ticket.update({
+      where: { id: req.body.id },
+      data: { status: req.body.status },
+    });
 
-  res.send(data);
+    res.send(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 app.listen(port, () => {
