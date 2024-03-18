@@ -9,25 +9,19 @@ import Select from "@/components/Select";
 import Spacer from "@/components/Spacer";
 import { Ticket, serverURL, statuses } from "@/app/common";
 import Input from "@/components/Input";
-import { useForm } from "react-hook-form";
-
-type FormInputs = {
-  searchQuery: string;
-};
 
 export default function Dashboard() {
-  const { register, watch } = useForm<FormInputs>();
-
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const page = Number(searchParams.get("page") ?? 0);
   const status = searchParams.get("status") ?? "all";
+  const searchQuery = searchParams.get("searchQuery") ?? "";
 
   const { data, isLoading } = useQuery({
-    queryKey: ["tickets", status, page, watch("searchQuery")],
-    queryFn: () => getTickets(status, page, watch("searchQuery")),
+    queryKey: ["tickets", status, page, searchQuery],
+    queryFn: () => getTickets(status, page, searchQuery),
     placeholderData: keepPreviousData,
   });
 
@@ -74,8 +68,11 @@ export default function Dashboard() {
         <div className="flex items-center">
           <Input
             className="[border:1px_solid_#D6D6D6] bg-white w-[250px] placeholder:text-black"
-            {...register("searchQuery")}
             placeholder="Search..."
+            onChange={(e) =>
+              updateSearchParams({ searchQuery: e.target.value })
+            }
+            value={searchQuery}
           />
           <div className="ml-auto w-[130px]">
             <Select
