@@ -9,7 +9,7 @@ Submit ticket: https://zealthy-five.vercel.app
 View dashboard: https://zealthy-five.vercel.app/dashboard
 
 
-## Starting the app
+## Getting started
 
 Install dependencies:
 
