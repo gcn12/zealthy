@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { TanstackQueryClientProvider } from "@/components/TanstackQueryProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
 
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <TanstackQueryClientProvider>
+        <Analytics />
         <body className={inter.className}>{children}</body>
       </TanstackQueryClientProvider>
     </html>
