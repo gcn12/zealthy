@@ -1,6 +1,6 @@
 # Help Desk App
 
-<img width="1534" alt="Screenshot 2024-03-17 at 6 34 55 PM" src="https://github.com/gcn12/zealthy/assets/63011139/2d20bbc4-d644-4ab2-9a0c-04e082fffac4">
+<img width="1438" alt="Screenshot 2024-03-19 at 7 52 29 AM" src="https://github.com/gcn12/zealthy/assets/63011139/821bed65-7897-496d-8e8e-ca214266b75c">
 
 ## Demo the app 
 
