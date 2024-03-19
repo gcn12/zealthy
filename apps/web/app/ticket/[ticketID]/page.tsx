@@ -60,6 +60,7 @@ export default function TicketPage() {
   const mutation = useMutation({
     mutationFn: updateStatus,
     onMutate: async (newStatus) => {
+      // Optimistic update
       await queryClient.cancelQueries({ queryKey: ["ticket"] });
       const previousTicket = queryClient.getQueryData(["ticket"]);
       queryClient.setQueryData(["ticket"], (prev: Ticket) => {
@@ -68,6 +69,7 @@ export default function TicketPage() {
       return { previousTicket };
     },
     onError: (_err, _newStatus, context) => {
+      // Revert optimistic update if error
       queryClient.setQueryData(["ticket"], context?.previousTicket);
     },
     onSettled: () => {
