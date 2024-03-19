@@ -66,7 +66,11 @@ export default function Dashboard() {
     <div className="h-full min-h-[700px] grid place-content-center">
       <div>
         <div className="flex items-center">
+          <label htmlFor="search" className="sr-only">
+            Search
+          </label>
           <Input
+            id="search"
             className="[border:1px_solid_#D6D6D6] bg-white w-[250px] placeholder:text-black"
             placeholder="Search..."
             onChange={(e) =>
@@ -104,7 +108,6 @@ export default function Dashboard() {
                   <Link
                     href={`/ticket/${id}?${searchParams.toString()}`}
                     key={id}
-                    className=""
                   >
                     <div className="flex flex-shrink-0 px-32px py-12px hover:bg-[#FAFAFA] transition-all duration-75">
                       <p className="min-w-[75px] text-14px">
@@ -153,12 +156,14 @@ export default function Dashboard() {
                   onClick={decrementPage}
                   className="[border:1px_solid_#D6D6D6] bg-white border-r-0 rounded-tl-4px rounded-bl-4px p-4px"
                 >
+                  <p className="sr-only">Previous page</p>
                   <ChevronLeftIcon height={22} width={22} />
                 </button>
                 <button
                   onClick={incrementPage}
                   className="[border:1px_solid_#D6D6D6] bg-white border-[1px] border-solid border-l-0 rounded-tr-4px rounded-br-4px p-4px"
                 >
+                  <p className="sr-only">Next page</p>
                   <ChevronRightIcon height={22} width={22} />
                 </button>
               </div>
