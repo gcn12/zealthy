@@ -71,7 +71,7 @@ export default function Dashboard() {
           </label>
           <Input
             id="search"
-            className="[border:1px_solid_#D6D6D6] bg-white w-[250px] placeholder:text-black"
+            className="[border:1px_solid_#D6D6D6] bg-white max-w-[200px] sm:max-w-[250px] sm:w-[250px] placeholder:text-black"
             placeholder="Search..."
             onChange={(e) =>
               updateSearchParams({ searchQuery: e.target.value })
