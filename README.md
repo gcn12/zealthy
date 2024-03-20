@@ -8,6 +8,14 @@ Submit ticket: https://zealthy-five.vercel.app
 
 View dashboard: https://zealthy-five.vercel.app/dashboard
 
+## Notable features
+
+- Full text search via Postgres
+- Custom UI design
+- Filter by ticket status
+- Pagination
+- Page, search query, and filter settings stored in URL params
+- Optimistic updates upon status change
 
 ## Getting started
 
